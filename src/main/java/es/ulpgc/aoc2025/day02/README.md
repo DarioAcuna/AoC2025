@@ -1,671 +1,375 @@
-# Advent of Code 2025 - Day 2: Gift Shop
+# Día 2: Gift Shop
 
-Este proyecto contiene la solución para el **Día 2** del Advent of Code 2025: **Gift Shop**.
+En el segundo día del Advent of Code 2025, el problema se desarrolla en la tienda de regalos del Polo Norte. Al llegar allí, uno de los elfos pide ayuda para revisar una base de datos de productos, ya que se han introducido muchos IDs de producto inválidos.
 
-El problema consiste en detectar identificadores de producto inválidos dentro de una serie de rangos numéricos. Estos identificadores inválidos siguen patrones repetitivos de dígitos.
-
-El día está dividido en dos partes:
-
-* **Parte 1**: un ID es inválido si está formado por una secuencia de dígitos repetida exactamente dos veces.
-* **Parte 2**: un ID es inválido si está formado por una secuencia de dígitos repetida al menos dos veces.
-
----
-
-## Descripción del problema
-
-La entrada del problema contiene una lista de rangos de IDs separados por comas.
-
-Ejemplo:
-
-```text
-11-22,95-115,998-1012,1188511880-1188511890
-```
-
-Cada rango tiene este formato:
-
-```text
-inicio-fin
-```
-
-Por ejemplo:
-
-```text
-95-115
-```
-
-representa todos los IDs desde `95` hasta `115`, ambos incluidos.
-
----
-
-## Parte 1
-
-En la primera parte, un ID es inválido si está formado por una secuencia de dígitos repetida exactamente dos veces.
-
-Ejemplos de IDs inválidos:
-
-```text
-55
-6464
-123123
-```
-
-En estos casos:
-
-* `55` es `5` repetido dos veces;
-* `6464` es `64` repetido dos veces;
-* `123123` es `123` repetido dos veces.
-
-Ejemplos de IDs válidos:
-
-```text
-101
-1234
-111
-```
-
-En la parte 1, `111` no se considera inválido porque no está formado por una secuencia repetida exactamente dos veces con la misma longitud total.
-
-La respuesta conocida para el input real de la parte 1 es:
-
-```text
-9188031749
-```
-
----
-
-## Parte 2
-
-En la segunda parte, la regla se amplía.
-
-Ahora un ID es inválido si está formado por una secuencia de dígitos repetida al menos dos veces.
-
-Ejemplos de IDs inválidos:
-
-```text
-12341234
-123123123
-1212121212
-1111111
-```
-
-En estos casos:
-
-* `12341234` es `1234` repetido dos veces;
-* `123123123` es `123` repetido tres veces;
-* `1212121212` es `12` repetido cinco veces;
-* `1111111` es `1` repetido siete veces.
-
-La diferencia principal respecto a la parte 1 es que ahora no se exige que la repetición sea exactamente dos veces, sino dos o más veces.
-
----
-
-## Diseño y arquitectura
-
-La solución sigue la misma estructura establecida para los días anteriores del proyecto:
-
-```text
-day02
-├── Day02Main.java
-├── common
-├── part1
-└── part2
-```
-
-El objetivo es separar claramente:
-
-* el punto de entrada del día;
-* las clases comunes del dominio;
-* la solución específica de la parte 1;
-* la solución específica de la parte 2.
-
-La lógica común del problema se encuentra en el paquete `common`, mientras que cada parte tiene su propio solver y su propia estrategia de generación de IDs inválidos.
-
----
-
-## Principios aplicados
-
-### Single Responsibility Principle, SRP
-
-Cada clase tiene una única responsabilidad:
-
-* `Day02Main`: ejecuta el día 2 y muestra los resultados.
-* `Day02Part1Solver`: resuelve únicamente la parte 1.
-* `Day02Part2Solver`: resuelve únicamente la parte 2.
-* `IdRange`: representa un rango de IDs.
-* `IdRangeParser`: convierte el input textual en rangos.
-* `InvalidProductIdGenerator`: define el contrato para generar IDs inválidos.
-* `TwiceRepeatedProductIdGenerator`: genera IDs inválidos para la parte 1.
-* `MultipleRepeatedProductIdGenerator`: genera IDs inválidos para la parte 2.
-
-Esta separación permite modificar o probar cada pieza de forma independiente.
-
----
-
-### Open/Closed Principle, OCP
-
-El diseño permite extender el comportamiento sin modificar el código existente.
-
-Por ejemplo, si apareciera una nueva regla para una hipotética parte 3, se podría crear una nueva implementación de `InvalidProductIdGenerator` sin modificar los solvers existentes.
-
-Ejemplo:
-
-```text
-part3
-└── AnotherInvalidProductIdGenerator.java
-```
-
-De esta manera, el sistema queda abierto a extensión, pero cerrado a modificaciones innecesarias.
-
----
-
-### Dependency Inversion Principle, DIP
-
-Los solvers no dependen directamente de una implementación concreta en su lógica principal, sino de la abstracción:
-
-```java
-InvalidProductIdGenerator
-```
-
-Esto permite que la generación de IDs inválidos pueda cambiar sin alterar la estructura general del solver.
-
-Además, los solvers implementan la interfaz común:
-
-```java
-PuzzleSolver
-```
-
-lo que permite ejecutar distintas partes del problema de forma uniforme.
-
----
-
-### DRY
-
-La lógica común se reutiliza en el paquete:
-
-```text
-es.ulpgc.aoc2025.day02.common
-```
-
-Aquí se encuentran las clases compartidas por ambas partes:
-
-* `IdRange`
-* `IdRangeParser`
-* `InvalidProductIdGenerator`
-
-Así se evita duplicar el parsing de rangos o la representación del dominio en cada parte.
-
----
-
-### Código expresivo
-
-El código intenta representar directamente los conceptos del problema.
-
-Por ejemplo:
-
-* `IdRange` representa un rango de IDs.
-* `InvalidProductIdGenerator` expresa la idea de generar IDs inválidos.
-* `TwiceRepeatedProductIdGenerator` indica claramente la regla de la parte 1.
-* `MultipleRepeatedProductIdGenerator` indica claramente la regla de la parte 2.
-
-Esto hace que el código sea más fácil de leer y mantener.
-
----
-
-## Estructura del proyecto
-
-```text
-src
-├── main
-│   ├── java
-│   │   └── es
-│   │       └── ulpgc
-│   │           └── aoc2025
-│   │               ├── common
-│   │               │   └── PuzzleSolver.java
-│   │               │
-│   │               └── day02
-│   │                   ├── Day02Main.java
-│   │                   │
-│   │                   ├── common
-│   │                   │   ├── IdRange.java
-│   │                   │   ├── IdRangeParser.java
-│   │                   │   └── InvalidProductIdGenerator.java
-│   │                   │
-│   │                   ├── part1
-│   │                   │   ├── Day02Part1Solver.java
-│   │                   │   └── TwiceRepeatedProductIdGenerator.java
-│   │                   │
-│   │                   └── part2
-│   │                       ├── Day02Part2Solver.java
-│   │                       └── MultipleRepeatedProductIdGenerator.java
-│   │
-│   └── resources
-│       └── day02
-│           └── input.txt
-│
-└── test
-    └── java
-        └── es
-            └── ulpgc
-                └── aoc2025
-                    └── day02
-                        ├── part1
-                        │   └── Day02Part1SolverTest.java
-                        └── part2
-                            └── Day02Part2SolverTest.java
-```
-
----
-
-## Paquetes principales
-
-### `es.ulpgc.aoc2025.common`
-
-Contiene código común a todo el proyecto Advent of Code.
-
-Actualmente contiene:
-
-```text
-PuzzleSolver.java
-```
-
-Esta interfaz define el contrato general que deben cumplir todos los solvers:
-
-```java
-long solve(List<String> lines);
-```
-
----
-
-### `es.ulpgc.aoc2025.day02`
-
-Contiene el punto de entrada específico del día 2:
-
-```text
-Day02Main.java
-```
-
-Esta clase se encarga de:
-
-1. leer el archivo de entrada;
-2. crear el solver de la parte 1;
-3. crear el solver de la parte 2;
-4. ejecutar ambos solvers;
-5. mostrar los resultados por consola.
-
----
-
-### `es.ulpgc.aoc2025.day02.common`
-
-Contiene las clases comunes del dominio del día 2.
-
-Estas clases son compartidas por la parte 1 y la parte 2.
-
----
-
-## Clases principales
-
-### `IdRange`
-
-Representa un rango de IDs.
-
-Se puede implementar como `record`, ya que es un objeto de datos inmutable compuesto por dos valores:
-
-```java
-package es.ulpgc.aoc2025.day02.common;
-
-public record IdRange(long firstId, long lastId) {
-
-    public IdRange {
-        if (firstId < 0) {
-            throw new IllegalArgumentException("First id cannot be negative");
-        }
-
-        if (lastId < 0) {
-            throw new IllegalArgumentException("Last id cannot be negative");
-        }
-
-        if (firstId > lastId) {
-            throw new IllegalArgumentException("First id cannot be greater than last id");
-        }
-    }
-
-    public boolean contains(long id) {
-        return firstId <= id && id <= lastId;
-    }
-}
-```
-
-El uso de `record` aporta varias ventajas:
-
-* expresa que el rango es un dato inmutable;
-* genera automáticamente `firstId()` y `lastId()`;
-* genera automáticamente `equals()`, `hashCode()` y `toString()`;
-* reduce código repetitivo;
-* permite añadir validación en el constructor compacto.
-
----
-
-### `IdRangeParser`
-
-Convierte el input textual en una lista de rangos.
-
-Por ejemplo:
+El archivo de entrada contiene varios rangos de IDs. Cada rango indica el primer y el último ID que deben revisarse. Los rangos aparecen separados por comas y cada uno tiene el siguiente formato:
 
 ```text
 11-22,95-115,998-1012
 ```
 
-se transforma en una lista de objetos `IdRange`.
+Cada rango contiene dos números separados por un guion:
 
-Su responsabilidad es únicamente interpretar el formato de entrada.
+* El primer número representa el ID inicial del rango.
+* El segundo número representa el ID final del rango.
+
+El objetivo del problema es encontrar todos los IDs inválidos dentro de esos rangos y sumar sus valores.
 
 ---
 
-### `InvalidProductIdGenerator`
+## Parte 1
 
-Define el contrato común para las clases que generan IDs inválidos.
+En la primera parte, un ID se considera inválido si está formado por una secuencia de dígitos repetida exactamente dos veces.
+
+Por ejemplo:
+
+* `55` es inválido porque está formado por `5` repetido dos veces.
+* `6464` es inválido porque está formado por `64` repetido dos veces.
+* `123123` es inválido porque está formado por `123` repetido dos veces.
+
+En cambio, un número como `101` no es inválido, ya que no está formado por dos mitades iguales.
+
+La tarea consiste en revisar todos los rangos del input, encontrar los IDs que cumplen este patrón y sumar todos los IDs inválidos encontrados.
+
+---
+
+## Parte 2
+
+En la segunda parte, la regla cambia. Ahora un ID se considera inválido si está formado por una secuencia de dígitos repetida al menos dos veces.
+
+Esto amplía los casos válidos respecto a la primera parte.
+
+Por ejemplo:
+
+* `12341234` es inválido porque `1234` se repite dos veces.
+* `123123123` es inválido porque `123` se repite tres veces.
+* `1212121212` es inválido porque `12` se repite cinco veces.
+* `1111111` es inválido porque `1` se repite siete veces.
+
+Por tanto, en esta parte no basta con buscar números formados por dos mitades iguales. También hay que detectar números formados por un bloque más pequeño repetido varias veces.
+
+La tarea consiste en encontrar todos los IDs inválidos según esta nueva regla y sumar sus valores.
+
+---
+
+# Clases del paquete `day02.common`
+
+El paquete `day02.common` contiene las clases e interfaces comunes utilizadas por las dos partes del Día 2. Su objetivo es representar los rangos de IDs, interpretar el input y definir una abstracción común para las distintas formas de generar IDs inválidos.
+
+---
+
+## `IdRange`
+
+El record `IdRange` representa un rango de IDs de producto.
+
+Está formado por dos valores:
+
+* `firstId`: primer ID incluido en el rango.
+* `lastId`: último ID incluido en el rango.
+
+Esta clase se encarga de modelar cada intervalo del input. Por ejemplo, el rango textual `95-115` se puede representar mediante un objeto `IdRange` cuyo `firstId` es `95` y cuyo `lastId` es `115`.
+
+Además, valida que los datos del rango sean correctos:
+
+* El primer ID no puede ser negativo.
+* El último ID no puede ser negativo.
+* El primer ID no puede ser mayor que el último.
+
+También incluye el método `contains`, que permite comprobar si un ID concreto pertenece al rango.
+
+```java
+public boolean contains(long id) {
+    return firstId <= id && id <= lastId;
+}
+```
+
+Al estar definido como `record`, `IdRange` es inmutable. Una vez creado un rango, sus valores no cambian.
+
+---
+
+## `IdRangeParser`
+
+La clase `IdRangeParser` se encarga de transformar el contenido del archivo de entrada en una lista de objetos `IdRange`.
+
+El input del problema puede aparecer como una línea larga con rangos separados por comas. Esta clase une las líneas recibidas, separa los rangos por comas y convierte cada rango textual en un objeto del dominio.
+
+Por ejemplo, a partir de este texto:
+
+```text
+11-22,95-115,998-1012
+```
+
+genera una lista con tres rangos:
+
+* `IdRange(11, 22)`
+* `IdRange(95, 115)`
+* `IdRange(998, 1012)`
+
+Sus responsabilidades principales son:
+
+* Unir las líneas del input.
+* Eliminar espacios innecesarios.
+* Separar los rangos usando la coma.
+* Ignorar fragmentos vacíos.
+* Separar cada rango usando el guion.
+* Convertir los límites a valores `long`.
+* Crear objetos `IdRange`.
+
+Esta clase separa la lógica de lectura e interpretación del input de la lógica de generación de IDs inválidos.
+
+---
+
+## `InvalidProductIdGenerator`
+
+La interfaz `InvalidProductIdGenerator` define el contrato que deben cumplir las clases capaces de generar IDs de producto inválidos.
+
+Contiene un único método:
 
 ```java
 Set<Long> generate(List<IdRange> ranges);
 ```
 
-Gracias a esta interfaz, cada parte puede tener su propia estrategia de generación sin cambiar la estructura general del solver.
+Este método recibe una lista de rangos y devuelve un conjunto de IDs inválidos encontrados dentro de esos rangos.
+
+El uso de `Set<Long>` evita duplicados. Esto es importante porque un mismo ID podría coincidir con más de una condición o aparecer relacionado con más de un rango, y solo debe sumarse una vez.
+
+Esta interfaz permite que cada parte del problema tenga su propia estrategia de generación de IDs inválidos:
+
+* En la parte 1, se generan IDs formados por un bloque repetido exactamente dos veces.
+* En la parte 2, se generan IDs formados por un bloque repetido al menos dos veces.
 
 ---
 
-### `TwiceRepeatedProductIdGenerator`
+# Clases del paquete `day02.part1`
 
-Genera los IDs inválidos de la parte 1.
-
-Un ID generado por esta clase está formado por una secuencia repetida exactamente dos veces.
-
-Ejemplos:
-
-```text
-11
-6464
-123123
-```
-
-La clase no recorre todos los IDs de todos los rangos. En su lugar:
-
-1. calcula el mayor ID de los rangos;
-2. genera posibles patrones repetidos;
-3. comprueba si cada candidato cae dentro de algún rango;
-4. guarda los IDs inválidos en un `Set`.
+El paquete `day02.part1` contiene las clases específicas para resolver la primera parte del problema.
 
 ---
 
-### `MultipleRepeatedProductIdGenerator`
+## `Day02Part1Solver`
 
-Genera los IDs inválidos de la parte 2.
+La clase `Day02Part1Solver` se encarga de resolver la primera parte del Día 2.
 
-Un ID generado por esta clase está formado por una secuencia repetida dos o más veces.
+Implementa la interfaz `PuzzleSolver`, por lo que debe definir el método:
 
-Ejemplos:
-
-```text
-111
-123123123
-1212121212
+```java
+long solve(List<String> lines);
 ```
 
-Se utiliza un `Set<Long>` porque un mismo número puede detectarse mediante más de una repetición.
+Su responsabilidad principal es coordinar el proceso completo de resolución de la parte 1.
+
+Para ello, realiza los siguientes pasos:
+
+1. Usa `IdRangeParser` para convertir el input en una lista de rangos.
+2. Usa `TwiceRepeatedProductIdGenerator` para generar los IDs inválidos.
+3. Convierte el conjunto de IDs inválidos en un stream.
+4. Suma todos los valores.
+5. Devuelve el resultado final.
+
+La clase no contiene directamente la lógica para construir los IDs inválidos. Esa responsabilidad se delega en `TwiceRepeatedProductIdGenerator`.
+
+---
+
+## `TwiceRepeatedProductIdGenerator`
+
+La clase `TwiceRepeatedProductIdGenerator` genera los IDs inválidos de la primera parte.
+
+Un ID es inválido en esta parte si está formado por un bloque de dígitos repetido exactamente dos veces.
 
 Por ejemplo:
 
+* `11`
+* `99`
+* `1010`
+* `6464`
+* `123123`
+
+Esta clase genera posibles bloques numéricos y construye IDs duplicando esos bloques. Después comprueba si el ID generado está dentro de alguno de los rangos del input.
+
+Sus responsabilidades principales son:
+
+* Calcular el ID máximo de todos los rangos.
+* Calcular cuántos dígitos tiene ese ID máximo.
+* Generar bloques de distintas longitudes.
+* Construir IDs repitiendo cada bloque dos veces.
+* Comprobar si el ID generado está dentro de algún rango.
+* Guardar los IDs inválidos en un `Set<Long>` para evitar duplicados.
+
+Por ejemplo, si el bloque es `123`, el ID generado será:
+
 ```text
-1111
+123123
 ```
 
-puede interpretarse como:
-
-```text
-1 repetido 4 veces
-11 repetido 2 veces
-```
-
-pero debe sumarse una sola vez.
+Esta clase contiene la lógica específica de la regla de la parte 1.
 
 ---
 
-### `Day02Part1Solver`
+# Clases del paquete `day02.part2`
 
-Resuelve la primera parte del problema.
-
-Su algoritmo es:
-
-1. parsear el input para obtener los rangos;
-2. generar los IDs inválidos según la regla de repetición exacta dos veces;
-3. sumar los IDs encontrados.
+El paquete `day02.part2` contiene las clases específicas para resolver la segunda parte del problema.
 
 ---
 
-### `Day02Part2Solver`
+## `Day02Part2Solver`
 
-Resuelve la segunda parte del problema.
+La clase `Day02Part2Solver` se encarga de resolver la segunda parte del Día 2.
 
-Su algoritmo es:
+Al igual que la clase de la parte 1, implementa la interfaz `PuzzleSolver`.
 
-1. parsear el input para obtener los rangos;
-2. generar los IDs inválidos según la regla de repetición dos o más veces;
-3. sumar los IDs encontrados.
+Su responsabilidad principal es coordinar la resolución de la parte 2.
 
----
+Para ello, realiza los siguientes pasos:
 
-## Diagrama de arquitectura
+1. Usa `IdRangeParser` para convertir el input en una lista de rangos.
+2. Usa `MultipleRepeatedProductIdGenerator` para generar los IDs inválidos.
+3. Convierte el conjunto de IDs inválidos en un stream.
+4. Suma todos los valores.
+5. Devuelve el resultado final.
 
-```mermaid
-classDiagram
-    class Day02Main {
-        +main(args: String[]) void$
-    }
-
-    class PuzzleSolver {
-        <<Interface>>
-        +solve(lines: List~String~) long
-    }
-
-    class Day02Part1Solver {
-        -parser: IdRangeParser
-        -generator: InvalidProductIdGenerator
-        +solve(lines: List~String~) long
-    }
-
-    class Day02Part2Solver {
-        -parser: IdRangeParser
-        -generator: InvalidProductIdGenerator
-        +solve(lines: List~String~) long
-    }
-
-    class IdRange {
-        <<Record>>
-        +firstId() long
-        +lastId() long
-        +contains(id: long) boolean
-    }
-
-    class IdRangeParser {
-        +parse(lines: List~String~) List~IdRange~
-    }
-
-    class InvalidProductIdGenerator {
-        <<Interface>>
-        +generate(ranges: List~IdRange~) Set~Long~
-    }
-
-    class TwiceRepeatedProductIdGenerator {
-        +generate(ranges: List~IdRange~) Set~Long~
-    }
-
-    class MultipleRepeatedProductIdGenerator {
-        +generate(ranges: List~IdRange~) Set~Long~
-    }
-
-    Day02Main ..> PuzzleSolver : usa
-    Day02Main ..> Day02Part1Solver : instancia
-    Day02Main ..> Day02Part2Solver : instancia
-
-    Day02Part1Solver ..|> PuzzleSolver : implementa
-    Day02Part2Solver ..|> PuzzleSolver : implementa
-
-    Day02Part1Solver --> IdRangeParser : usa
-    Day02Part2Solver --> IdRangeParser : usa
-
-    Day02Part1Solver --> InvalidProductIdGenerator : usa
-    Day02Part2Solver --> InvalidProductIdGenerator : usa
-
-    TwiceRepeatedProductIdGenerator ..|> InvalidProductIdGenerator : implementa
-    MultipleRepeatedProductIdGenerator ..|> InvalidProductIdGenerator : implementa
-
-    IdRangeParser --> IdRange : crea
-    InvalidProductIdGenerator --> IdRange : consulta
-```
+La diferencia principal con `Day02Part1Solver` es el generador que utiliza. En lugar de usar `TwiceRepeatedProductIdGenerator`, utiliza `MultipleRepeatedProductIdGenerator`.
 
 ---
 
-## Entrada del programa
+## `MultipleRepeatedProductIdGenerator`
 
-El archivo de entrada debe colocarse en:
+La clase `MultipleRepeatedProductIdGenerator` genera los IDs inválidos de la segunda parte.
+
+En esta parte, un ID es inválido si está formado por un bloque de dígitos repetido al menos dos veces.
+
+Por ejemplo:
+
+* `11`
+* `999`
+* `1010`
+* `123123123`
+* `1212121212`
+* `1111111`
+
+Esta clase amplía la lógica de la primera parte, ya que no se limita a repetir un bloque dos veces. En su lugar, prueba distintas longitudes totales, distintas longitudes de bloque y distintas cantidades de repeticiones.
+
+Sus responsabilidades principales son:
+
+* Calcular el ID máximo de todos los rangos.
+* Calcular el número máximo de dígitos necesario.
+* Probar diferentes longitudes totales de ID.
+* Probar diferentes longitudes de bloque.
+* Comprobar que la longitud total sea divisible entre la longitud del bloque.
+* Calcular cuántas veces debe repetirse el bloque.
+* Construir el ID repitiendo el bloque.
+* Comprobar si el ID generado está dentro de algún rango.
+* Guardar los IDs inválidos en un `Set<Long>` para evitar duplicados.
+
+Por ejemplo, si el bloque es `12` y se repite cinco veces, el ID generado será:
 
 ```text
-src/main/resources/day02/input.txt
+1212121212
 ```
 
-El contenido debe estar en una única línea o en varias líneas equivalentes:
-
-```text
-11-22,95-115,998-1012,1188511880-1188511890,222220-222224
-```
-
-Los rangos están separados por comas.
+Esta clase contiene la lógica específica de la regla de la parte 2.
 
 ---
 
-## Ejecución en IntelliJ IDEA
+# Clase del paquete `day02`
 
-Para ejecutar el día 2:
-
-1. abrir el archivo:
-
-```text
-src/main/java/es/ulpgc/aoc2025/day02/Day02Main.java
-```
-
-2. pulsar el botón verde junto al método `main`;
-
-3. seleccionar:
-
-```text
-Run 'Day02Main.main()'
-```
-
-La salida tendrá un formato similar a:
-
-```text
-Day 02 - Part 1: 9188031749
-Day 02 - Part 2: <resultado_parte_2>
-```
+El paquete `day02` contiene la clase principal del Día 2.
 
 ---
 
-## Ejecución con Maven
+## `Day02Main`
 
-Para ejecutar los tests:
+La clase `Day02Main` es el punto de entrada para ejecutar la solución completa del Día 2.
 
-```bash
-mvn test
-```
+Su responsabilidad principal no es resolver directamente el problema, sino preparar la ejecución de ambas partes.
 
----
+El método `main` realiza los siguientes pasos:
 
-## Tests
+1. Lee todas las líneas del archivo `src/main/resources/day02/input.txt`.
+2. Crea una instancia de `Day02Part1Solver`.
+3. Crea una instancia de `Day02Part2Solver`.
+4. Ejecuta el método `solve` de cada solver.
+5. Guarda los resultados de ambas partes.
+6. Imprime los resultados por consola.
 
-El proyecto incluye tests separados para cada parte:
-
-```text
-Day02Part1SolverTest.java
-Day02Part2SolverTest.java
-```
-
-Los tests comprueban el ejemplo oficial:
-
-```text
-11-22,95-115,998-1012,1188511880-1188511890,222220-222224,
-1698522-1698528,446443-446449,38593856-38593862,565653-565659,
-824824821-824824827,2121212118-2121212124
-```
-
-Resultado esperado para la parte 1:
-
-```text
-1227775554
-```
-
-Resultado esperado para la parte 2:
-
-```text
-4174379265
-```
-
----
-
-## Estrategia de resolución
-
-Una solución simple podría recorrer todos los IDs de cada rango:
+Esta clase utiliza la interfaz `PuzzleSolver` para referenciar ambos solvers:
 
 ```java
-for (long id = range.firstId(); id <= range.lastId(); id++) {
-    ...
-}
+PuzzleSolver part1Solver = new Day02Part1Solver();
+PuzzleSolver part2Solver = new Day02Part2Solver();
 ```
 
-Sin embargo, este enfoque puede ser ineficiente si los rangos son grandes.
-
-La solución aplicada genera únicamente los candidatos que podrían ser inválidos:
-
-1. se generan números formados por patrones repetidos;
-2. se comprueba si cada candidato pertenece a algún rango;
-3. se almacena en un `Set<Long>` para evitar duplicados;
-4. se suman los IDs inválidos encontrados.
-
-Esto evita revisar números que no pueden cumplir el patrón.
+Gracias a esto, ambas partes pueden ejecutarse de forma uniforme, aunque internamente usen reglas distintas para encontrar IDs inválidos.
 
 ---
 
-## Convención para próximos días
+# Interfaz común del proyecto
 
-Cada día del Advent of Code seguirá la misma estructura:
+Además de las clases específicas del Día 2, el proyecto utiliza la interfaz común `PuzzleSolver`, ubicada en el paquete `aoc2025.common`.
 
-```text
-dayXX
-├── DayXXMain.java
-├── common
-├── part1
-└── part2
+Esta interfaz define el contrato común para todos los solvers del Advent of Code:
+
+```java
+long solve(List<String> lines);
 ```
 
-Ejemplo para el día 3:
+En el Día 2, tanto `Day02Part1Solver` como `Day02Part2Solver` implementan esta interfaz.
 
-```text
-day03
-├── Day03Main.java
-├── common
-├── part1
-└── part2
-```
+Esto permite que las soluciones de todos los días mantengan una estructura común:
 
-De esta forma, cada día queda aislado y se evita mezclar soluciones de problemas distintos.
+* Una clase principal que lee el input.
+* Un solver para la parte 1.
+* Un solver para la parte 2.
+* Un método `solve` común para ejecutar cada solución.
 
 ---
 
-## Conclusión
+# Fundamentos de diseño utilizados
 
-La solución del día 2 está organizada para mantener una separación clara entre el dominio común y las reglas específicas de cada parte.
+En la solución del Día 2 se utilizan los siguientes fundamentos de diseño:
 
-El uso de `IdRange` como `record` permite representar rangos de forma inmutable y expresiva.
+* Alta cohesión.
+* Bajo acoplamiento.
+* Modularidad.
+* Código expresivo.
+* Abstracción.
+* Encapsulación.
+* Diseño por contrato.
+* Inmutabilidad.
 
-La interfaz `InvalidProductIdGenerator` permite aplicar distintas estrategias de generación de IDs inválidos para cada parte, manteniendo el código extensible y fácil de probar.
+---
 
-Esta estructura permite continuar el Advent of Code de forma ordenada, añadiendo nuevos días sin modificar las soluciones anteriores.
+# Principios de diseño aplicados
+
+* Principio de Responsabilidad Única, SRP.
+* Principio Abierto/Cerrado, OCP.
+* Principio de Sustitución de Liskov, LSP.
+* Principio de Segregación de Interfaces, ISP.
+* Principio de Inversión de Dependencias, DIP.
+* Composición sobre herencia.
+* Principio DRY.
+* Ley de Demeter.
+* Principio YAGNI.
+* Principio de mínima sorpresa.
+
+---
+
+# Patrones de diseño aplicados
+
+* Iterator.
+* Strategy.
+
+---
+
+# Conclusión
+
+La solución del Día 2 está organizada en clases con responsabilidades bien separadas.
+
+El paquete `day02.common` contiene los elementos compartidos por ambas partes: los rangos de IDs, el parser del input y la interfaz común para generar IDs inválidos.
+
+La parte 1 utiliza una estrategia centrada en detectar IDs formados por un bloque repetido exactamente dos veces.
+
+La parte 2 utiliza otra estrategia más general, capaz de detectar IDs formados por un bloque repetido al menos dos veces.
+
+La clase `Day02Main` actúa como punto de entrada y coordina la ejecución de ambas partes sin contener lógica específica del problema.
+
+Gracias a esta estructura, el código es claro, modular, extensible y fácil de mantener.
