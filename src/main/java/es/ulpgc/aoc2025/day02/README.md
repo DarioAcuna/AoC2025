@@ -361,7 +361,6 @@ En la solución del Día 2 se utilizan los siguientes fundamentos de diseño:
 ---
 ## Patrones no aplicados
 
-Aunque algunos patrones aparecen en los materiales teóricos, no todos son necesarios en esta solución.
 
 No se aplica `Singleton`, porque no hay ninguna clase que necesite garantizar una única instancia global.
 
@@ -375,7 +374,6 @@ No se aplica `Observer`, porque no hay objetos observadores suscritos a cambios 
 
 No se aplica `Template Method`, aunque las dos partes tienen una estructura parecida. Ambos solvers parsean el input, generan IDs inválidos y suman el resultado, pero no existe una clase abstracta común que defina el esqueleto del algoritmo.
 
-Esta ausencia también es positiva, porque aplicar patrones sin necesidad haría el código más complejo sin aportar beneficios reales.
 
 ---
 # Conclusión
