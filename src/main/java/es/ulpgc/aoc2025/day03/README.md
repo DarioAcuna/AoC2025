@@ -1,7 +1,5 @@
 # Advent of Code 2025 - Día 3: Lobby
 
-Este documento recoge la explicación del **Día 3** del Advent of Code 2025: **Lobby**.
-
 El problema plantea que los ascensores y las escaleras mecánicas del vestíbulo están sin funcionar. Para alimentar las escaleras mecánicas, se dispone de varios bancos de baterías. Cada banco aparece en el input como una línea de dígitos, y cada dígito representa la potencia de una batería, con valores entre `1` y `9`.
 
 El voltaje producido por un banco se calcula formando un número con las baterías seleccionadas. Las baterías no pueden reordenarse: el número debe respetar el orden en el que aparecen los dígitos en la línea.
