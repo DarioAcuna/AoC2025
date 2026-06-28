@@ -1,23 +1,18 @@
-# Advent of Code 2025 - Day 5: Cafeteria
+# Día 5: Cafeteria
 
-Este proyecto contiene la solución para el **Día 5** del Advent of Code 2025: **Cafeteria**.
+En el quinto día del Advent of Code 2025, el problema se desarrolla en la cafetería del Polo Norte. Tras atravesar la pared del departamento de impresión, los elfos descubren que en la cocina tienen un problema con su nuevo sistema de inventario.
 
-El problema consiste en procesar una base de datos de inventario de ingredientes. La base de datos contiene una lista de rangos de IDs considerados frescos, una línea en blanco y una lista de IDs de ingredientes disponibles.
+El sistema trabaja con IDs de ingredientes. Algunos IDs se consideran frescos porque pertenecen a ciertos rangos, mientras que otros están disponibles en el inventario y hay que comprobar si son frescos o no.
 
-El día está dividido en dos partes:
+El archivo de entrada tiene dos secciones:
 
-* **Parte 1**: contar cuántos IDs disponibles son frescos.
-* **Parte 2**: contar cuántos IDs distintos son considerados frescos por la unión de todos los rangos.
-
----
-
-## Descripción del problema
-
-La entrada tiene dos secciones separadas por una línea en blanco.
+1. Una lista de rangos de IDs frescos.
+2. Una línea en blanco.
+3. Una lista de IDs de ingredientes disponibles.
 
 Ejemplo:
 
-```text
+```text id="k2zwfn"
 3-5
 10-14
 16-20
@@ -31,62 +26,32 @@ Ejemplo:
 32
 ```
 
-La primera sección contiene rangos de IDs frescos:
+Los rangos son inclusivos. Por ejemplo, el rango `3-5` incluye los IDs `3`, `4` y `5`.
 
-```text
-3-5
-10-14
-16-20
-12-18
-```
-
-La segunda sección contiene IDs disponibles:
-
-```text
-1
-5
-8
-11
-17
-32
-```
-
-Los rangos son inclusivos. Por ejemplo:
-
-```text
-3-5
-```
-
-significa que los IDs `3`, `4` y `5` son frescos.
-
-Los rangos pueden solaparse. Un ingrediente es fresco si pertenece al menos a uno de los rangos.
+Los rangos también pueden solaparse. Un ingrediente se considera fresco si pertenece a cualquiera de los rangos.
 
 ---
 
 ## Parte 1
 
-En la primera parte se deben revisar los IDs disponibles y contar cuántos de ellos están dentro de algún rango fresco.
+En la primera parte, el objetivo es contar cuántos de los IDs disponibles son frescos.
 
-Con el ejemplo oficial:
+Para ello, hay que comprobar cada ID de la segunda sección del input y verificar si pertenece a alguno de los rangos frescos de la primera sección.
 
-```text
-ID 1  → spoiled
-ID 5  → fresh
-ID 8  → spoiled
-ID 11 → fresh
-ID 17 → fresh
-ID 32 → spoiled
-```
+En el ejemplo:
 
-Por tanto, el resultado es:
+* `1` no pertenece a ningún rango, por tanto está estropeado.
+* `5` pertenece al rango `3-5`, por tanto está fresco.
+* `8` no pertenece a ningún rango, por tanto está estropeado.
+* `11` pertenece al rango `10-14`, por tanto está fresco.
+* `17` pertenece a los rangos `16-20` y `12-18`, por tanto está fresco.
+* `32` no pertenece a ningún rango, por tanto está estropeado.
 
-```text
-3
-```
+En total, hay `3` IDs disponibles frescos.
 
-Con el input real del usuario, el resultado de la parte 1 es:
+Con el input real, el resultado obtenido para la parte 1 fue:
 
-```text
+```text id="r2epdi"
 563
 ```
 
@@ -96,795 +61,399 @@ Con el input real del usuario, el resultado de la parte 1 es:
 
 En la segunda parte, la lista de IDs disponibles deja de ser relevante.
 
-Ahora se pide contar cuántos IDs distintos son considerados frescos por los rangos.
+Ahora el objetivo es contar cuántos IDs distintos son considerados frescos por la unión de todos los rangos frescos.
 
-Usando el ejemplo:
+Por ejemplo, con estos rangos:
 
-```text
+```text id="awipnj"
 3-5
 10-14
 16-20
 12-18
 ```
 
-Los IDs frescos son:
+Los IDs considerados frescos son:
 
-```text
-3, 4, 5,
-10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
+```text id="zkyjw5"
+3, 4, 5, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20
 ```
 
-Aunque los rangos `10-14`, `16-20` y `12-18` se solapan, los IDs no deben contarse varias veces.
+Aunque los rangos `10-14`, `16-20` y `12-18` se solapan, los IDs repetidos solo deben contarse una vez.
 
-El resultado del ejemplo es:
+En el ejemplo hay `14` IDs frescos distintos.
 
-```text
-14
-```
+Con el input real, el resultado obtenido para la parte 2 fue:
 
-Con el input real del usuario, el resultado de la parte 2 es:
-
-```text
+```text id="ianog7"
 338693411431456
 ```
 
 ---
 
-## Diseño y arquitectura
+# Estructura del proyecto
 
-La solución mantiene la estructura modular usada en los días anteriores:
+La solución del Día 5 mantiene la misma estructura modular usada en los días anteriores:
 
-```text
+```text id="clv7rh"
 day05
 ├── Day05Main.java
 ├── common
+│   ├── FreshIngredientRanges.java
+│   ├── IngredientIdRange.java
+│   ├── InventoryDatabase.java
+│   └── InventoryDatabaseParser.java
 ├── part1
+│   └── Day05Part1Solver.java
 └── part2
+    └── Day05Part2Solver.java
 ```
 
-El objetivo es separar claramente:
+La idea principal es separar:
 
-* el punto de entrada del día;
-* el modelo común del problema;
-* el parser de la base de datos;
-* la lógica común de rangos frescos;
-* la solución específica de la parte 1;
-* la solución específica de la parte 2.
-
-En este día, las clases comunes pueden reutilizarse en ambas partes sin necesidad de duplicarlas.
-
-La única modificación necesaria para la parte 2 es añadir un método a `FreshIngredientRanges` para contar el total de IDs cubiertos por los rangos fusionados. Como es un cambio pequeño y coherente con la responsabilidad de esa clase, no hace falta crear una copia específica para `part2`.
+* El punto de entrada del día.
+* Las clases comunes del dominio.
+* El parseo de la base de datos.
+* La solución específica de la parte 1.
+* La solución específica de la parte 2.
+* La lógica de unión y consulta de rangos frescos.
 
 ---
 
-## Principios aplicados
+# Clases del paquete `day05.common`
 
-### Single Responsibility Principle, SRP
-
-Cada clase tiene una única responsabilidad:
-
-* `Day05Main`: ejecuta el día 5 y muestra los resultados.
-* `IngredientIdRange`: representa un rango de IDs de ingredientes.
-* `InventoryDatabase`: representa la base de datos completa del problema.
-* `InventoryDatabaseParser`: convierte el input textual en una base de datos.
-* `FreshIngredientRanges`: gestiona la unión de rangos frescos y permite consultarlos.
-* `Day05Part1Solver`: resuelve únicamente la parte 1.
-* `Day05Part2Solver`: resuelve únicamente la parte 2.
-
-Esta separación permite modificar, probar y entender cada clase de forma independiente.
+El paquete `day05.common` contiene las clases compartidas por las dos partes del problema.
 
 ---
 
-### Open/Closed Principle, OCP
+## `IngredientIdRange`
 
-El diseño permite añadir la parte 2 sin romper la parte 1.
+El record `IngredientIdRange` representa un rango inclusivo de IDs de ingredientes.
 
-La parte 1 usa `FreshIngredientRanges` para comprobar si un ID disponible es fresco.
+Está formado por dos valores:
 
-La parte 2 reutiliza la misma clase para contar cuántos IDs distintos cubren los rangos frescos.
-
-La clase común se amplía con un método pequeño:
-
-```java
-totalFreshIngredientIds()
+```java id="ao0oar"
+public record IngredientIdRange(long firstId, long lastId)
 ```
 
-Esto mantiene el sistema abierto a extensión sin introducir cambios invasivos.
+* `firstId`: primer ID incluido en el rango.
+* `lastId`: último ID incluido en el rango.
+
+Por ejemplo, el rango textual `10-14` se representa como:
+
+```text id="mpf1sl"
+IngredientIdRange(10, 14)
+```
+
+Esta clase valida que el rango sea correcto:
+
+* El primer ID no puede ser negativo.
+* El último ID no puede ser negativo.
+* El primer ID no puede ser mayor que el último.
+
+Sus métodos principales son:
+
+```java id="4iu0xs"
+public boolean contains(long ingredientId)
+```
+
+Comprueba si un ID pertenece al rango.
+
+```java id="n7mbf6"
+public boolean overlapsOrTouches(IngredientIdRange other)
+```
+
+Comprueba si dos rangos se solapan o son consecutivos.
+
+```java id="k5s325"
+public IngredientIdRange mergeWith(IngredientIdRange other)
+```
+
+Fusiona dos rangos que se solapan o se tocan.
+
+Esta clase es fundamental porque permite trabajar con rangos como objetos del dominio en lugar de manejar pares de números sueltos.
 
 ---
 
-### Dependency Inversion Principle, DIP
+## `FreshIngredientRanges`
 
-Los solvers implementan la interfaz común:
+El record `FreshIngredientRanges` representa el conjunto de rangos que consideran frescos a los ingredientes.
 
-```java
-PuzzleSolver
+Su responsabilidad principal es recibir una lista de rangos y fusionar aquellos que se solapan o se tocan. De esta forma, la clase trabaja internamente con una lista de rangos simplificada y ordenada.
+
+Por ejemplo, estos rangos:
+
+```text id="i0u8kc"
+10-14
+12-18
+16-20
 ```
 
-Esto permite tratarlos de forma uniforme desde el `Main`:
+pueden fusionarse en:
 
-```java
+```text id="xmef55"
+10-20
+```
+
+porque se solapan entre sí.
+
+Sus métodos principales son:
+
+```java id="kp7fcl"
+public boolean contains(long ingredientId)
+```
+
+Comprueba si un ID pertenece a alguno de los rangos frescos.
+
+Para hacerlo de forma eficiente, usa búsqueda binaria sobre los rangos fusionados.
+
+```java id="knuo2n"
+public long totalFreshIngredientIds()
+```
+
+Calcula cuántos IDs distintos son considerados frescos por la unión de todos los rangos.
+
+Esto se consigue sumando el tamaño de cada rango fusionado:
+
+```text id="bf6sk0"
+lastId - firstId + 1
+```
+
+Esta clase es especialmente importante en la parte 2, porque permite contar una cantidad enorme de IDs sin tener que generarlos uno por uno.
+
+---
+
+## `InventoryDatabase`
+
+El record `InventoryDatabase` representa la base de datos completa del inventario.
+
+Está formado por dos partes:
+
+```java id="uz487v"
+public record InventoryDatabase(
+        List<IngredientIdRange> freshRanges,
+        List<Long> availableIngredientIds
+)
+```
+
+* `freshRanges`: lista de rangos de IDs frescos.
+* `availableIngredientIds`: lista de IDs disponibles en el inventario.
+
+Esta clase copia ambas listas con `List.copyOf`, evitando que puedan modificarse desde fuera después de crear la base de datos.
+
+Su propósito es agrupar en un único objeto las dos secciones del input.
+
+---
+
+## `InventoryDatabaseParser`
+
+La clase `InventoryDatabaseParser` se encarga de transformar las líneas del archivo de entrada en un objeto `InventoryDatabase`.
+
+El input tiene dos secciones separadas por una línea en blanco:
+
+```text id="nlbcme"
+3-5
+10-14
+
+1
+5
+8
+```
+
+La primera sección contiene rangos frescos.
+
+La segunda sección contiene IDs disponibles.
+
+El parser utiliza una variable booleana para saber si todavía está leyendo rangos o si ya ha pasado a leer IDs disponibles.
+
+Sus responsabilidades principales son:
+
+* Recorrer las líneas del input.
+* Detectar la línea en blanco que separa ambas secciones.
+* Parsear los rangos de la primera sección.
+* Parsear los IDs disponibles de la segunda sección.
+* Crear un objeto `InventoryDatabase`.
+
+También incluye un método privado `parseRange`, encargado de convertir una línea como `3-5` en un objeto `IngredientIdRange`.
+
+Esta clase separa el formato del input de la lógica de resolución del problema.
+
+---
+
+# Clases del paquete `day05.part1`
+
+El paquete `day05.part1` contiene la solución específica de la primera parte.
+
+---
+
+## `Day05Part1Solver`
+
+La clase `Day05Part1Solver` se encarga de resolver la primera parte del Día 5.
+
+Implementa la interfaz común `PuzzleSolver`, por lo que define el método:
+
+```java id="cvc85i"
+public long solve(List<String> lines)
+```
+
+Su responsabilidad principal es contar cuántos IDs disponibles son frescos.
+
+Para ello, realiza los siguientes pasos:
+
+1. Usa `InventoryDatabaseParser` para convertir el input en un `InventoryDatabase`.
+2. Crea un objeto `FreshIngredientRanges` a partir de los rangos frescos.
+3. Recorre todos los IDs disponibles.
+4. Comprueba si cada ID está contenido en los rangos frescos.
+5. Incrementa un contador por cada ID fresco.
+6. Devuelve el total.
+
+Esta clase no decide cómo se fusionan los rangos ni cómo se realiza la búsqueda. Esa lógica se delega en `FreshIngredientRanges`.
+
+---
+
+# Clases del paquete `day05.part2`
+
+El paquete `day05.part2` contiene la solución específica de la segunda parte.
+
+---
+
+## `Day05Part2Solver`
+
+La clase `Day05Part2Solver` se encarga de resolver la segunda parte del Día 5.
+
+También implementa la interfaz `PuzzleSolver`.
+
+Su responsabilidad principal es calcular cuántos IDs distintos son considerados frescos por los rangos de la primera sección del input.
+
+Para ello, realiza los siguientes pasos:
+
+1. Usa `InventoryDatabaseParser` para convertir el input en un `InventoryDatabase`.
+2. Crea un objeto `FreshIngredientRanges` a partir de los rangos frescos.
+3. Llama al método `totalFreshIngredientIds`.
+4. Devuelve el resultado.
+
+A diferencia de la parte 1, esta clase no utiliza los IDs disponibles de la segunda sección, porque en la parte 2 solo importan los rangos frescos.
+
+La lógica de fusionar rangos y contar IDs únicos está encapsulada en `FreshIngredientRanges`.
+
+---
+
+# Clase del paquete `day05`
+
+El paquete `day05` contiene la clase principal del Día 5.
+
+---
+
+## `Day05Main`
+
+La clase `Day05Main` es el punto de entrada para ejecutar la solución completa del Día 5.
+
+Su responsabilidad principal no es resolver directamente el problema, sino preparar la ejecución.
+
+El método `main` realiza los siguientes pasos:
+
+1. Lee todas las líneas del archivo `src/main/resources/day05/input.txt`.
+2. Crea una instancia de `Day05Part1Solver`.
+3. Crea una instancia de `Day05Part2Solver`.
+4. Ejecuta el método `solve` de ambos solvers.
+5. Guarda los resultados.
+6. Imprime los resultados por consola.
+
+Esta clase utiliza la interfaz `PuzzleSolver` para referenciar ambos solvers:
+
+```java id="8rvivi"
 PuzzleSolver part1Solver = new Day05Part1Solver();
 PuzzleSolver part2Solver = new Day05Part2Solver();
 ```
 
-El punto de entrada no necesita conocer los detalles internos de cada solver.
+Gracias a esto, ambas partes se ejecutan de forma uniforme, aunque internamente tengan comportamientos distintos.
 
 ---
 
-### DRY
+# Interfaz común del proyecto
 
-La lógica común del día 5 se mantiene en:
+Además de las clases específicas del Día 5, el proyecto utiliza la interfaz común `PuzzleSolver`, ubicada en el paquete `aoc2025.common`.
 
-```text
-es.ulpgc.aoc2025.day05.common
-```
+Esta interfaz define el contrato común para todos los solvers del Advent of Code:
 
-Aquí se encuentran:
-
-* `IngredientIdRange`
-* `InventoryDatabase`
-* `InventoryDatabaseParser`
-* `FreshIngredientRanges`
-
-Así se evita duplicar el parser, la representación de rangos o la lógica de fusión de intervalos.
-
----
-
-### Código expresivo
-
-El código intenta representar directamente los conceptos del problema.
-
-Por ejemplo:
-
-* `IngredientIdRange` representa un rango de IDs.
-* `InventoryDatabase` representa la base de datos del inventario.
-* `FreshIngredientRanges` representa el conjunto de rangos frescos ya procesados.
-* `contains` expresa si un ID pertenece a algún rango fresco.
-* `totalFreshIngredientIds` expresa cuántos IDs distintos son frescos.
-
----
-
-## Estructura del proyecto
-
-```text
-src
-├── main
-│   ├── java
-│   │   └── es
-│   │       └── ulpgc
-│   │           └── aoc2025
-│   │               ├── common
-│   │               │   └── PuzzleSolver.java
-│   │               │
-│   │               └── day05
-│   │                   ├── Day05Main.java
-│   │                   │
-│   │                   ├── common
-│   │                   │   ├── FreshIngredientRanges.java
-│   │                   │   ├── IngredientIdRange.java
-│   │                   │   ├── InventoryDatabase.java
-│   │                   │   └── InventoryDatabaseParser.java
-│   │                   │
-│   │                   ├── part1
-│   │                   │   └── Day05Part1Solver.java
-│   │                   │
-│   │                   └── part2
-│   │                       └── Day05Part2Solver.java
-│   │
-│   └── resources
-│       └── day05
-│           └── input.txt
-│
-└── test
-    └── java
-        └── es
-            └── ulpgc
-                └── aoc2025
-                    └── day05
-                        ├── part1
-                        │   └── Day05Part1SolverTest.java
-                        └── part2
-                            └── Day05Part2SolverTest.java
-```
-
----
-
-## Paquetes principales
-
-### `es.ulpgc.aoc2025.common`
-
-Contiene código común a todo el proyecto Advent of Code.
-
-Actualmente contiene:
-
-```text
-PuzzleSolver.java
-```
-
-Esta interfaz define el contrato general que deben cumplir todos los solvers:
-
-```java
+```java id="2g9ryu"
 long solve(List<String> lines);
 ```
 
----
+En el Día 5, tanto `Day05Part1Solver` como `Day05Part2Solver` implementan esta interfaz.
 
-### `es.ulpgc.aoc2025.day05`
+Esto permite mantener una estructura común para todos los días:
 
-Contiene el punto de entrada específico del día 5:
-
-```text
-Day05Main.java
-```
-
-Esta clase se encarga de:
-
-1. leer el archivo de entrada;
-2. crear el solver de la parte 1;
-3. crear el solver de la parte 2;
-4. ejecutar ambos solvers;
-5. mostrar los resultados por consola.
+* Una clase principal que lee el input.
+* Un solver para la parte 1.
+* Un solver para la parte 2.
+* Un método `solve` común para ejecutar cada solución.
 
 ---
 
-### `es.ulpgc.aoc2025.day05.common`
+# Fundamentos de diseño utilizados
 
-Contiene las clases comunes del dominio del día 5.
+En la solución del Día 5 se utilizan los siguientes fundamentos de diseño:
 
-Estas clases son compartidas por ambas partes porque representan conceptos generales del problema.
-
----
-
-### `es.ulpgc.aoc2025.day05.part1`
-
-Contiene la solución específica de la primera parte.
-
----
-
-### `es.ulpgc.aoc2025.day05.part2`
-
-Contiene la solución específica de la segunda parte.
+* Alta cohesión.
+* Bajo acoplamiento.
+* Modularidad.
+* Código expresivo.
+* Abstracción.
+* Encapsulación.
+* Diseño por contrato.
+* Inmutabilidad.
+* Eficiencia algorítmica.
 
 ---
 
-## Clases principales
+# Principios de diseño aplicados
 
-### `IngredientIdRange`
+En la solución del Día 5 se aplican los siguientes principios de diseño:
 
-Representa un rango inclusivo de IDs de ingredientes.
-
-Se implementa como `record` porque es un objeto de datos inmutable formado por dos valores:
-
-```java
-package es.ulpgc.aoc2025.day05.common;
-
-public record IngredientIdRange(long firstId, long lastId) {
-
-    public IngredientIdRange {
-        if (firstId < 0) {
-            throw new IllegalArgumentException("First id cannot be negative");
-        }
-
-        if (lastId < 0) {
-            throw new IllegalArgumentException("Last id cannot be negative");
-        }
-
-        if (firstId > lastId) {
-            throw new IllegalArgumentException("First id cannot be greater than last id");
-        }
-    }
-
-    public boolean contains(long ingredientId) {
-        return firstId <= ingredientId && ingredientId <= lastId;
-    }
-
-    public boolean overlapsOrTouches(IngredientIdRange other) {
-        return this.firstId <= other.lastId + 1
-                && other.firstId <= this.lastId + 1;
-    }
-
-    public IngredientIdRange mergeWith(IngredientIdRange other) {
-        if (!overlapsOrTouches(other)) {
-            throw new IllegalArgumentException("Ranges do not overlap or touch");
-        }
-
-        return new IngredientIdRange(
-                Math.min(this.firstId, other.firstId),
-                Math.max(this.lastId, other.lastId)
-        );
-    }
-}
-```
-
-Responsabilidades:
-
-* almacenar el inicio y fin del rango;
-* validar que el rango sea correcto;
-* comprobar si un ID pertenece al rango;
-* comprobar si dos rangos se solapan o son consecutivos;
-* fusionar dos rangos compatibles.
+* Principio de Responsabilidad Única, SRP.
+* Principio Abierto/Cerrado, OCP.
+* Principio de Sustitución de Liskov, LSP.
+* Principio de Segregación de Interfaces, ISP.
+* Principio de Inversión de Dependencias, DIP.
+* Composición sobre herencia.
+* Principio DRY.
+* Ley de Demeter.
+* Principio YAGNI.
+* Principio de mínima sorpresa.
 
 ---
 
-### `InventoryDatabase`
+# Patrones de diseño aplicados
 
-Representa la base de datos completa del problema.
+En la solución del Día 5 se utilizan los siguientes patrones de diseño:
 
-```java
-package es.ulpgc.aoc2025.day05.common;
-
-import java.util.List;
-
-public record InventoryDatabase(
-        List<IngredientIdRange> freshRanges,
-        List<Long> availableIngredientIds
-) {
-
-    public InventoryDatabase {
-        if (freshRanges == null) {
-            throw new IllegalArgumentException("Fresh ranges cannot be null");
-        }
-
-        if (availableIngredientIds == null) {
-            throw new IllegalArgumentException("Available ingredient ids cannot be null");
-        }
-
-        freshRanges = List.copyOf(freshRanges);
-        availableIngredientIds = List.copyOf(availableIngredientIds);
-    }
-}
-```
-
-Aunque la parte 2 ignora los IDs disponibles, la estructura completa sigue siendo útil porque representa fielmente el formato del input.
+* Iterator.
+* Strategy.
+* Command, aplicado parcialmente.
 
 ---
 
-### `InventoryDatabaseParser`
+# Patrones no aplicados
 
-Convierte las líneas del input en un `InventoryDatabase`.
+En la solución del Día 5 no se aplican los siguientes patrones de diseño:
 
-```java
-package es.ulpgc.aoc2025.day05.common;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class InventoryDatabaseParser {
-
-    public InventoryDatabase parse(List<String> lines) {
-        List<IngredientIdRange> freshRanges = new ArrayList<>();
-        List<Long> availableIngredientIds = new ArrayList<>();
-
-        boolean readingAvailableIds = false;
-
-        for (String line : lines) {
-            if (line.isBlank()) {
-                readingAvailableIds = true;
-                continue;
-            }
-
-            if (readingAvailableIds) {
-                availableIngredientIds.add(Long.parseLong(line.trim()));
-            } else {
-                freshRanges.add(parseRange(line.trim()));
-            }
-        }
-
-        return new InventoryDatabase(freshRanges, availableIngredientIds);
-    }
-
-    private IngredientIdRange parseRange(String line) {
-        String[] bounds = line.split("-");
-
-        if (bounds.length != 2) {
-            throw new IllegalArgumentException("Invalid range: " + line);
-        }
-
-        long firstId = Long.parseLong(bounds[0]);
-        long lastId = Long.parseLong(bounds[1]);
-
-        return new IngredientIdRange(firstId, lastId);
-    }
-}
-```
-
-Su responsabilidad es únicamente interpretar el formato del archivo.
-
-No decide qué ingredientes son frescos ni calcula resultados.
+* Singleton.
+* Factory Method.
+* Adapter.
+* Decorator.
+* Observer.
+* Template Method.
 
 ---
 
-### `FreshIngredientRanges`
+# Conclusión
 
-Representa la colección de rangos frescos ya fusionados.
+La solución del Día 5 está organizada de forma clara y modular.
 
-```java
-package es.ulpgc.aoc2025.day05.common;
+La primera parte cuenta cuántos IDs disponibles son frescos, comprobando si pertenecen a alguno de los rangos frescos.
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+La segunda parte calcula cuántos IDs distintos son considerados frescos por la unión de todos los rangos, ignorando la lista de IDs disponibles.
 
-public class FreshIngredientRanges {
+El diseño separa correctamente el input, el modelo del dominio, la lógica de rangos y la resolución de cada parte. La clase `FreshIngredientRanges` es clave porque fusiona rangos solapados y permite realizar consultas eficientes mediante búsqueda binaria.
 
-    private final List<IngredientIdRange> mergedRanges;
-
-    public FreshIngredientRanges(List<IngredientIdRange> ranges) {
-        this.mergedRanges = merge(ranges);
-    }
-
-    public boolean contains(long ingredientId) {
-        int left = 0;
-        int right = mergedRanges.size() - 1;
-
-        while (left <= right) {
-            int middle = left + (right - left) / 2;
-            IngredientIdRange range = mergedRanges.get(middle);
-
-            if (range.contains(ingredientId)) {
-                return true;
-            }
-
-            if (ingredientId < range.firstId()) {
-                right = middle - 1;
-            } else {
-                left = middle + 1;
-            }
-        }
-
-        return false;
-    }
-
-    // Añadido para la parte 2.
-    // Devuelve cuántos IDs distintos son considerados frescos por la unión de rangos.
-    public long totalFreshIngredientIds() {
-        long total = 0;
-
-        for (IngredientIdRange range : mergedRanges) {
-            total += range.lastId() - range.firstId() + 1;
-        }
-
-        return total;
-    }
-
-    private List<IngredientIdRange> merge(List<IngredientIdRange> ranges) {
-        if (ranges.isEmpty()) {
-            return List.of();
-        }
-
-        List<IngredientIdRange> sortedRanges = ranges.stream()
-                .sorted(Comparator.comparingLong(IngredientIdRange::firstId))
-                .toList();
-
-        List<IngredientIdRange> merged = new ArrayList<>();
-        IngredientIdRange current = sortedRanges.getFirst();
-
-        for (int i = 1; i < sortedRanges.size(); i++) {
-            IngredientIdRange next = sortedRanges.get(i);
-
-            if (current.overlapsOrTouches(next)) {
-                current = current.mergeWith(next);
-            } else {
-                merged.add(current);
-                current = next;
-            }
-        }
-
-        merged.add(current);
-
-        return List.copyOf(merged);
-    }
-}
-```
-
-Responsabilidades:
-
-* ordenar los rangos;
-* fusionar rangos solapados o consecutivos;
-* comprobar si un ID pertenece a algún rango fresco;
-* contar cuántos IDs distintos son frescos.
-
----
-
-### `Day05Part1Solver`
-
-Resuelve la primera parte del problema.
-
-Su algoritmo es:
-
-1. parsear la base de datos;
-2. fusionar los rangos frescos;
-3. recorrer los IDs disponibles;
-4. contar cuántos están dentro de algún rango fresco.
-
----
-
-### `Day05Part2Solver`
-
-Resuelve la segunda parte del problema.
-
-Su algoritmo es:
-
-1. parsear la base de datos;
-2. ignorar los IDs disponibles;
-3. fusionar los rangos frescos;
-4. contar cuántos IDs distintos cubren los rangos fusionados.
-
----
-
-## Estrategia de resolución
-
-### Parte 1
-
-Una solución directa sería comprobar cada ID disponible contra todos los rangos originales.
-
-Sin embargo, como los rangos pueden solaparse, primero se fusionan.
-
-Ejemplo:
-
-```text
-10-14
-16-20
-12-18
-```
-
-se convierte en:
-
-```text
-10-20
-```
-
-Después, para comprobar si un ID es fresco, se usa búsqueda binaria sobre los rangos fusionados.
-
-Esto evita recorrer todos los rangos para cada ID disponible.
-
----
-
-### Parte 2
-
-En la parte 2 no se usan los IDs disponibles.
-
-Solo se necesita saber cuántos IDs distintos cubren los rangos frescos.
-
-Después de fusionar los rangos, se calcula el tamaño de cada rango:
-
-```text
-lastId - firstId + 1
-```
-
-y se suman todos los tamaños.
-
-Ejemplo:
-
-```text
-3-5      → 3 IDs
-10-20    → 11 IDs
-```
-
-Total:
-
-```text
-14
-```
-
----
-
-## Diagrama de arquitectura
-
-```mermaid
-classDiagram
-    class Day05Main {
-        +main(args: String[]) void$
-    }
-
-    class PuzzleSolver {
-        <<Interface>>
-        +solve(lines: List~String~) long
-    }
-
-    class IngredientIdRange {
-        <<Record>>
-        +firstId() long
-        +lastId() long
-        +contains(ingredientId: long) boolean
-        +overlapsOrTouches(other: IngredientIdRange) boolean
-        +mergeWith(other: IngredientIdRange) IngredientIdRange
-    }
-
-    class InventoryDatabase {
-        <<Record>>
-        +freshRanges() List~IngredientIdRange~
-        +availableIngredientIds() List~Long~
-    }
-
-    class InventoryDatabaseParser {
-        +parse(lines: List~String~) InventoryDatabase
-    }
-
-    class FreshIngredientRanges {
-        -mergedRanges: List~IngredientIdRange~
-        +contains(ingredientId: long) boolean
-        +totalFreshIngredientIds() long
-    }
-
-    class Day05Part1Solver {
-        -parser: InventoryDatabaseParser
-        +solve(lines: List~String~) long
-    }
-
-    class Day05Part2Solver {
-        -parser: InventoryDatabaseParser
-        +solve(lines: List~String~) long
-    }
-
-    Day05Main ..> PuzzleSolver : usa
-    Day05Main ..> Day05Part1Solver : instancia
-    Day05Main ..> Day05Part2Solver : instancia
-
-    Day05Part1Solver ..|> PuzzleSolver : implementa
-    Day05Part2Solver ..|> PuzzleSolver : implementa
-
-    InventoryDatabaseParser --> InventoryDatabase : crea
-    InventoryDatabaseParser --> IngredientIdRange : crea
-
-    FreshIngredientRanges --> IngredientIdRange : fusiona y consulta
-
-    Day05Part1Solver --> InventoryDatabaseParser : usa
-    Day05Part1Solver --> FreshIngredientRanges : consulta
-
-    Day05Part2Solver --> InventoryDatabaseParser : usa
-    Day05Part2Solver --> FreshIngredientRanges : cuenta total
-```
-
----
-
-## Entrada del programa
-
-El archivo de entrada debe colocarse en:
-
-```text
-src/main/resources/day05/input.txt
-```
-
-El contenido debe respetar el formato:
-
-```text
-<rangos frescos>
-
-<ids disponibles>
-```
-
-Ejemplo:
-
-```text
-3-5
-10-14
-16-20
-12-18
-
-1
-5
-8
-11
-17
-32
-```
-
----
-
-## Ejecución en IntelliJ IDEA
-
-Para ejecutar el día 5:
-
-1. abrir el archivo:
-
-```text
-src/main/java/es/ulpgc/aoc2025/day05/Day05Main.java
-```
-
-2. pulsar el botón verde junto al método `main`;
-
-3. seleccionar:
-
-```text
-Run 'Day05Main.main()'
-```
-
-La salida tendrá este formato:
-
-```text
-Day 05 - Part 1: 563
-Day 05 - Part 2: 338693411431456
-```
-
----
-
-## Ejecución con Maven
-
-Para ejecutar los tests:
-
-```bash
-mvn test
-```
-
----
-
-## Tests
-
-El proyecto incluye tests separados para cada parte:
-
-```text
-Day05Part1SolverTest.java
-Day05Part2SolverTest.java
-```
-
-Los tests usan el ejemplo oficial:
-
-```text
-3-5
-10-14
-16-20
-12-18
-
-1
-5
-8
-11
-17
-32
-```
-
-Resultado esperado para la parte 1:
-
-```text
-3
-```
-
-Resultado esperado para la parte 2:
-
-```text
-14
-```
-
----
-
-## Convención para próximos días
-
-Cada día del Advent of Code seguirá la misma estructura:
-
-```text
-dayXX
-├── DayXXMain.java
-├── common
-├── part1
-└── part2
-```
-
-Ejemplo para el día 6:
-
-```text
-day06
-├── Day06Main.java
-├── common
-├── part1
-└── part2
-```
-
-Cuando una clase pueda compartirse sin modificar su comportamiento, se coloca en `common`.
-
-Cuando una parte requiera modificar mucho el comportamiento de una clase común, se crea una clase específica dentro de `part1` o `part2`.
-
-Cuando el cambio sea pequeño y coherente con la responsabilidad de la clase, se añade directamente a la clase común y se marca con un comentario.
-
----
-
-## Conclusión
-
-La solución del día 5 está organizada para separar claramente el parsing, el modelo del dominio y la lógica específica de cada parte.
-
-La clase `FreshIngredientRanges` centraliza la lógica de fusión y consulta de rangos frescos. Esto evita duplicación, mejora la eficiencia y permite resolver ambas partes reutilizando el mismo modelo común.
-
-La parte 1 cuenta cuántos IDs disponibles son frescos, mientras que la parte 2 cuenta cuántos IDs distintos cubren los rangos frescos.
-
-Esta estructura mantiene el proyecto modular, fácil de probar y preparado para seguir añadiendo nuevos días.
+Gracias a esta estructura, el código es más fácil de entender, probar, mantener y defender en una explicación oral.
