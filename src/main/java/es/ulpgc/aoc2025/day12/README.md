@@ -82,28 +82,6 @@ Por tanto, el resultado del ejemplo es:
 2
 ```
 
-Con el input real, el resultado obtenido para la parte 1 fue:
-
-```text id="day12-part1-result"
-544
-```
-
----
-
-## Parte 2
-
-En el enunciado del Día 12, la segunda parte no introduce una nueva tarea computacional como en los días anteriores.
-
-La historia continúa con la llegada de más elfos y estrellas para decorar los árboles, pero no se proporciona un nuevo cálculo, una nueva regla o un nuevo resultado que implementar.
-
-Por eso, en el código del proyecto solo existe la solución de la parte 1:
-
-```text id="day12-only-part1"
-Day12Part1Solver
-```
-
-y la clase principal ejecuta únicamente esa parte.
-
 ---
 
 # Estructura del proyecto
