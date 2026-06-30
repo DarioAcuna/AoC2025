@@ -50,12 +50,6 @@ El resultado final es la suma de todos los resultados individuales:
 33210 + 490 + 4243455 + 401 = 4277556
 ```
 
-Con el input real, el resultado obtenido para la parte 1 fue:
-
-```text
-5322004718681
-```
-
 ---
 
 ## Parte 2
@@ -86,12 +80,6 @@ El resultado final es:
 
 ```text
 1058 + 3253600 + 625 + 8544 = 3263827
-```
-
-Con el input real, el resultado obtenido para la parte 2 fue:
-
-```text
-9876636978528
 ```
 
 ---
