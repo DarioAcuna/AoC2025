@@ -43,12 +43,6 @@ Si varios rayos llegan a la misma posición, se consideran como un único rayo a
 
 En el ejemplo oficial, el rayo se divide un total de `21` veces.
 
-Con el input real, el resultado obtenido para la parte 1 fue:
-
-```text id="d7-part1-result"
-1626
-```
-
 ---
 
 ## Parte 2
@@ -63,12 +57,6 @@ Ahora no se envían múltiples rayos, sino una única partícula de taquiones. C
 El objetivo ya no es contar cuántos splitters se activan, sino cuántas líneas temporales existen al final de todos los posibles recorridos.
 
 En el ejemplo oficial, la partícula acaba en `40` líneas temporales distintas.
-
-Con el input real, el resultado obtenido para la parte 2 fue:
-
-```text id="d7-part2-result"
-48989920237096
-```
 
 ---
 
@@ -342,11 +330,6 @@ En la solución del Día 7 se utilizan los siguientes fundamentos de diseño:
 * Modularidad.
 * Código expresivo.
 * Abstracción.
-* Encapsulación.
-* Diseño por contrato.
-* Inmutabilidad.
-* Eficiencia algorítmica.
-* Agrupación de estados.
 
 ---
 
@@ -359,7 +342,6 @@ En la solución del Día 7 se aplican los siguientes principios de diseño:
 * Principio de Sustitución de Liskov, LSP.
 * Principio de Segregación de Interfaces, ISP.
 * Principio de Inversión de Dependencias, DIP.
-* Composición sobre herencia.
 * Principio DRY.
 * Ley de Demeter.
 * Principio YAGNI.
@@ -372,8 +354,6 @@ En la solución del Día 7 se aplican los siguientes principios de diseño:
 En la solución del Día 7 se utilizan los siguientes patrones de diseño:
 
 * Iterator.
-* Strategy.
-* Command, aplicado parcialmente.
 
 ---
 
@@ -386,16 +366,6 @@ En la solución del Día 7 no se aplican los siguientes patrones de diseño:
 * Adapter.
 * Decorator.
 * Observer.
-* Template Method.
 
 ---
 
-# Conclusión
-
-La solución del Día 7 está organizada de forma clara y modular.
-
-La primera parte cuenta cuántas veces se divide el rayo de taquiones usando un conjunto de columnas activas.
-
-La segunda parte calcula cuántas líneas temporales quedan activas usando un mapa que agrupa el número de timelines por columna.
-
-El diseño separa correctamente el modelo del colector, el parseo del input, la lógica clásica de división y la lógica cuántica de timelines. Esto permite que el código sea fácil de entender, probar, mantener y defender en una explicación oral.
