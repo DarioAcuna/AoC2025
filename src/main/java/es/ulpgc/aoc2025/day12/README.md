@@ -436,15 +436,6 @@ En la solución del Día 12 se utilizan los siguientes fundamentos de diseño:
 * Modularidad.
 * Código expresivo.
 * Abstracción.
-* Encapsulación.
-* Diseño por contrato.
-* Inmutabilidad.
-* Modelado de cuadrículas.
-* Transformaciones geométricas.
-* Backtracking.
-* Memoización de estados fallidos.
-* Representación mediante máscaras de bits.
-* Optimización por poda.
 
 ---
 
@@ -457,7 +448,6 @@ En la solución del Día 12 se aplican los siguientes principios de diseño:
 * Principio de Sustitución de Liskov, LSP.
 * Principio de Segregación de Interfaces, ISP.
 * Principio de Inversión de Dependencias, DIP.
-* Composición sobre herencia.
 * Principio DRY.
 * Ley de Demeter.
 * Principio YAGNI.
@@ -470,9 +460,7 @@ En la solución del Día 12 se aplican los siguientes principios de diseño:
 En la solución del Día 12 se utilizan los siguientes patrones de diseño:
 
 * Iterator.
-* Strategy.
-* Command, aplicado parcialmente.
-
+  
 ---
 
 # Patrones no aplicados
@@ -484,15 +472,5 @@ En la solución del Día 12 no se aplican los siguientes patrones de diseño:
 * Adapter.
 * Decorator.
 * Observer.
-* Template Method.
-* State.
 
 ---
-
-# Conclusión
-
-La solución del Día 12 está organizada de forma clara y modular.
-
-El problema consiste en comprobar si distintos conjuntos de regalos con formas irregulares pueden colocarse dentro de regiones rectangulares. Para ello, el código modela las formas, genera transformaciones mediante rotaciones y reflejos, calcula áreas y realiza una búsqueda exacta cuando la región es suficientemente pequeña.
-
-El diseño separa correctamente el parseo, el modelo del informe, las formas de regalos, las regiones y la lógica de empaquetado. Esto permite que el código sea más fácil de entender, probar, mantener y defender en una explicación oral.
