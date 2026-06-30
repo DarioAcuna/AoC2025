@@ -448,7 +448,6 @@ En la solución del Día 8 se aplican los siguientes principios de diseño:
 En la solución del Día 8 se utilizan los siguientes patrones de diseño:
 
 * Iterator.
-* Command, aplicado parcialmente.
 
 ---
 
