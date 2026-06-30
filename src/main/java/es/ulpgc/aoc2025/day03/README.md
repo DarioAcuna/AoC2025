@@ -386,9 +386,3 @@ Aunque algunos patrones aparecen en los materiales teóricos, no todos son neces
 - No se aplica `Template Method` como patrón formal.
 
 ---
-
-# Conclusión
-
-La solución del Día 3 está organizada de forma modular. El dominio común se concentra en el paquete `day03.common`, mientras que cada parte tiene su propio solver.
-
-El algoritmo principal está centralizado en `MaximumJoltageCalculator`, lo que permite reutilizar la misma lógica para la parte 1 y la parte 2 cambiando únicamente el número de baterías que deben encenderse.
