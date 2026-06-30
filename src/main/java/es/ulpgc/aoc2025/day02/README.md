@@ -366,5 +366,3 @@ No se aplica `Decorator`, porque no se añaden responsabilidades dinámicamente 
 
 No se aplica `Observer`, porque no hay objetos observadores suscritos a cambios de estado de otros objetos.
 
-No se aplica `Template Method`, aunque las dos partes tienen una estructura parecida. Ambos solvers parsean el input, generan IDs inválidos y suman el resultado, pero no existe una clase abstracta común que defina el esqueleto del algoritmo.
-
