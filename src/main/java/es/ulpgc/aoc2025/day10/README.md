@@ -59,11 +59,6 @@ En el ejemplo oficial, las pulsaciones mínimas son:
 2 + 3 + 2 = 7
 ```
 
-Con el input real, el resultado obtenido para la parte 1 fue:
-
-```text
-498
-```
 
 ---
 
@@ -103,11 +98,6 @@ En el ejemplo oficial, las pulsaciones mínimas son:
 10 + 12 + 11 = 33
 ```
 
-Con el input real, el resultado obtenido para la parte 2 fue:
-
-```text
-17133
-```
 
 ---
 
@@ -421,13 +411,6 @@ En la solución del Día 10 se utilizan los siguientes fundamentos de diseño:
 * Modularidad.
 * Código expresivo.
 * Abstracción.
-* Encapsulación.
-* Diseño por contrato.
-* Inmutabilidad.
-* Representación mediante máscaras de bits.
-* Programación dinámica.
-* Modelado algebraico.
-* Búsqueda de soluciones enteras.
 
 ---
 
@@ -440,11 +423,9 @@ En la solución del Día 10 se aplican los siguientes principios de diseño:
 * Principio de Sustitución de Liskov, LSP.
 * Principio de Segregación de Interfaces, ISP.
 * Principio de Inversión de Dependencias, DIP.
-* Composición sobre herencia.
 * Principio DRY.
 * Ley de Demeter.
 * Principio YAGNI.
-* Principio de mínima sorpresa.
 
 ---
 
@@ -453,9 +434,7 @@ En la solución del Día 10 se aplican los siguientes principios de diseño:
 En la solución del Día 10 se utilizan los siguientes patrones de diseño:
 
 * Iterator.
-* Strategy.
-* Factory Method, aplicado de forma simple mediante `IndicatorLightDiagram.from`.
-* Command, aplicado parcialmente.
+* Factory Method, aplicado mediante `IndicatorLightDiagram.from`.
 
 ---
 
@@ -467,16 +446,5 @@ En la solución del Día 10 no se aplican los siguientes patrones de diseño:
 * Adapter.
 * Decorator.
 * Observer.
-* Template Method.
 
 ---
-
-# Conclusión
-
-La solución del Día 10 está organizada de forma clara y modular.
-
-La primera parte calcula el número mínimo de pulsaciones necesarias para configurar las luces de cada máquina usando máscaras binarias y programación dinámica.
-
-La segunda parte calcula el número mínimo de pulsaciones necesarias para alcanzar los requisitos de joltage usando un sistema lineal y una búsqueda de soluciones enteras no negativas.
-
-El diseño separa correctamente el parseo del manual, el modelo de las máquinas, la lógica de luces, la lógica de joltage y la ejecución de cada parte. Esto permite que el código sea fácil de entender, probar, mantener y defender en una explicación oral.
