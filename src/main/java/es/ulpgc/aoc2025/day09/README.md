@@ -357,15 +357,6 @@ Para ello, verifica dos condiciones:
 1. Todas las esquinas del rectángulo deben estar dentro de la región o sobre su frontera.
 2. Ningún segmento de la frontera debe atravesar el interior del rectángulo.
 
-La clase usa varios métodos auxiliares:
-
-* `containsAllCornersOf`: comprueba las esquinas del rectángulo.
-* `isOnBoundary`: comprueba si una posición está sobre la frontera.
-* `isInside`: comprueba si una posición está dentro de la región.
-* `hasBoundaryInside`: comprueba si la frontera atraviesa el interior del rectángulo.
-
-Para saber si una posición está dentro de la región, se usa una técnica de intersección con un rayo horizontal.
-
 ---
 
 # Clase del paquete `day09`
