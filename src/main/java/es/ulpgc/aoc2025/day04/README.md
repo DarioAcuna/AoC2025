@@ -42,11 +42,6 @@ Solo se cuentan los rollos accesibles en el estado inicial del diagrama. En esta
 
 En el ejemplo oficial hay `13` rollos accesibles.
 
-Con el input real, el resultado obtenido para la parte 1 fue:
-
-```text
-1489
-```
 
 ---
 
@@ -68,11 +63,6 @@ El objetivo es contar cuántos rollos pueden eliminarse en total después de rep
 
 En el ejemplo oficial se pueden retirar `43` rollos.
 
-Con el input real, el resultado obtenido para la parte 2 fue:
-
-```text
-8890
-```
 
 ---
 
@@ -381,10 +371,6 @@ En la solución del Día 4 se utilizan los siguientes fundamentos de diseño:
 * Modularidad.
 * Código expresivo.
 * Abstracción.
-* Encapsulación.
-* Diseño por contrato.
-* Inmutabilidad.
-* Mutabilidad controlada.
 
 ---
 
@@ -397,11 +383,9 @@ En la solución del Día 4 se aplican los siguientes principios de diseño:
 * Principio de Sustitución de Liskov, LSP.
 * Principio de Segregación de Interfaces, ISP.
 * Principio de Inversión de Dependencias, DIP.
-* Composición sobre herencia.
 * Principio DRY.
 * Ley de Demeter.
 * Principio YAGNI.
-* Principio de mínima sorpresa.
 
 ---
 
@@ -410,9 +394,6 @@ En la solución del Día 4 se aplican los siguientes principios de diseño:
 En la solución del Día 4 se utilizan los siguientes patrones de diseño:
 
 * Iterator.
-* Strategy.
-* Command, aplicado parcialmente.
-
 ---
 
 # Patrones no aplicados
@@ -424,16 +405,8 @@ En la solución del Día 4 no se aplican los siguientes patrones de diseño:
 * Adapter.
 * Decorator.
 * Observer.
-* Template Method.
 
 ---
 
-# Conclusión
-
-La solución del Día 4 está organizada de forma clara y modular.
-
-La primera parte analiza el diagrama inicial y cuenta los rollos accesibles según el número de vecinos.
-
-La segunda parte usa una representación mutable del diagrama para simular la retirada progresiva de rollos. Cada vez que se elimina un rollo, se actualizan los vecinos y se detectan nuevos rollos accesibles.
 
 El diseño separa correctamente el input, el modelo del dominio, la lógica de cada parte y la simulación mutable. Esto permite que el código sea más fácil de entender, probar, mantener y defender en una explicación oral.
