@@ -423,9 +423,7 @@ En la solución del Día 6 se aplican los siguientes principios de diseño:
 En la solución del Día 6 se utilizan los siguientes patrones de diseño:
 
 * Iterator.
-* Strategy.
 * Factory Method, aplicado de forma simple mediante `MathOperation.fromSymbol`.
-* Command, aplicado parcialmente.
 
 ---
 
@@ -437,14 +435,5 @@ En la solución del Día 6 no se aplican los siguientes patrones de diseño:
 * Adapter.
 * Decorator.
 * Observer.
-* Template Method.
 
 ---
-
-# Conclusión
-
-La solución del Día 6 está organizada de forma clara y modular.
-
-La primera parte interpreta la hoja leyendo los problemas horizontalmente por bloques. La segunda parte cambia la interpretación y lee los números por columnas de derecha a izquierda.
-
-El diseño separa correctamente el modelo matemático, la hoja de entrada, el parseo, la extracción de problemas y la resolución de cada parte. Esto permite que el código sea fácil de entender, probar, mantener y defender en una explicación oral.
