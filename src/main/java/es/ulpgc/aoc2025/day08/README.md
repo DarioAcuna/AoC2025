@@ -57,12 +57,6 @@ El producto es:
 5 * 4 * 2 = 40
 ```
 
-Con el input real, el resultado obtenido para la parte 1 fue:
-
-```text
-83520
-```
-
 ---
 
 ## Parte 2
@@ -76,12 +70,6 @@ Cuando una conexión une dos circuitos distintos, esos circuitos se fusionan. Si
 El objetivo es detectar cuál es la conexión que por fin hace que todas las cajas formen un único circuito.
 
 Una vez encontrada esa conexión final, se multiplican las coordenadas `X` de las dos cajas conectadas.
-
-Con el input real, el resultado obtenido para la parte 2 fue:
-
-```text
-1131823407
-```
 
 ---
 
@@ -437,12 +425,6 @@ En la solución del Día 8 se utilizan los siguientes fundamentos de diseño:
 * Modularidad.
 * Código expresivo.
 * Abstracción.
-* Encapsulación.
-* Diseño por contrato.
-* Inmutabilidad.
-* Eficiencia algorítmica.
-* Agrupación de estados.
-* Ordenación de conexiones.
 
 ---
 
@@ -455,11 +437,9 @@ En la solución del Día 8 se aplican los siguientes principios de diseño:
 * Principio de Sustitución de Liskov, LSP.
 * Principio de Segregación de Interfaces, ISP.
 * Principio de Inversión de Dependencias, DIP.
-* Composición sobre herencia.
 * Principio DRY.
 * Ley de Demeter.
 * Principio YAGNI.
-* Principio de mínima sorpresa.
 
 ---
 
@@ -468,7 +448,6 @@ En la solución del Día 8 se aplican los siguientes principios de diseño:
 En la solución del Día 8 se utilizan los siguientes patrones de diseño:
 
 * Iterator.
-* Strategy.
 * Command, aplicado parcialmente.
 
 ---
@@ -482,16 +461,6 @@ En la solución del Día 8 no se aplican los siguientes patrones de diseño:
 * Adapter.
 * Decorator.
 * Observer.
-* Template Method.
 
 ---
-
-# Conclusión
-
-La solución del Día 8 está organizada de forma clara y modular.
-
-La primera parte conecta las `1000` conexiones más cortas y calcula el producto de los tres circuitos más grandes.
-
-La segunda parte continúa conectando cajas hasta que todas forman un único circuito y devuelve el producto de las coordenadas `X` de la última conexión necesaria.
-
 El diseño separa correctamente el parseo, el modelo de posiciones, la generación de conexiones, la estructura de circuitos y la lógica específica de cada parte. Esto permite que el código sea fácil de entender, probar, mantener y defender en una explicación oral.
