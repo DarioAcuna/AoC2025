@@ -229,17 +229,14 @@ En la solución del Día 1 se aplican los siguientes principios de diseño:
 * Principio de Sustitución de Liskov, LSP.
 * Principio de Segregación de Interfaces, ISP.
 * Principio de Inversión de Dependencias, DIP.
-* Composición sobre herencia.
 * Principio DRY.
 * Ley de Demeter.
 * Principio YAGNI.
-* Principio de mínima sorpresa.
 
 ## Patrones de diseño aplicados
 En la solución del Día 1 se utilizan los siguientes patrones de diseño:
 
 * Iterator.
-* Strategy.
 
 ## Patrones no aplicados
 
