@@ -360,14 +360,6 @@ En la solución del Día 11 se utilizan los siguientes fundamentos de diseño:
 * Modularidad.
 * Código expresivo.
 * Abstracción.
-* Encapsulación.
-* Diseño por contrato.
-* Inmutabilidad.
-* Modelado de grafos dirigidos.
-* Recursividad.
-* Memoización.
-* Detección de ciclos.
-* Búsqueda con estado.
 
 ---
 
@@ -380,11 +372,9 @@ En la solución del Día 11 se aplican los siguientes principios de diseño:
 * Principio de Sustitución de Liskov, LSP.
 * Principio de Segregación de Interfaces, ISP.
 * Principio de Inversión de Dependencias, DIP.
-* Composición sobre herencia.
 * Principio DRY.
 * Ley de Demeter.
 * Principio YAGNI.
-* Principio de mínima sorpresa.
 
 ---
 
@@ -393,8 +383,6 @@ En la solución del Día 11 se aplican los siguientes principios de diseño:
 En la solución del Día 11 se utilizan los siguientes patrones de diseño:
 
 * Iterator.
-* Strategy.
-* Command, aplicado parcialmente.
 
 ---
 
@@ -407,17 +395,5 @@ En la solución del Día 11 no se aplican los siguientes patrones de diseño:
 * Adapter.
 * Decorator.
 * Observer.
-* Template Method.
-* State.
 
 ---
-
-# Conclusión
-
-La solución del Día 11 está organizada de forma clara y modular.
-
-La primera parte cuenta todos los caminos desde `you` hasta `out`.
-
-La segunda parte cuenta los caminos desde `svr` hasta `out`, pero solo aquellos que visitan tanto `dac` como `fft`.
-
-El diseño separa correctamente el parseo, el modelo de la red de dispositivos, el conteo de caminos simples y el conteo de caminos con estado adicional. Esto permite que el código sea fácil de entender, probar, mantener y defender en una explicación oral.
