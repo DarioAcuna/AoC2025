@@ -399,10 +399,6 @@ En la solución del Día 5 se utilizan los siguientes fundamentos de diseño:
 * Modularidad.
 * Código expresivo.
 * Abstracción.
-* Encapsulación.
-* Diseño por contrato.
-* Inmutabilidad.
-* Eficiencia algorítmica.
 
 ---
 
@@ -419,7 +415,6 @@ En la solución del Día 5 se aplican los siguientes principios de diseño:
 * Principio DRY.
 * Ley de Demeter.
 * Principio YAGNI.
-* Principio de mínima sorpresa.
 
 ---
 
@@ -428,9 +423,7 @@ En la solución del Día 5 se aplican los siguientes principios de diseño:
 En la solución del Día 5 se utilizan los siguientes patrones de diseño:
 
 * Iterator.
-* Strategy.
-* Command, aplicado parcialmente.
-
+  
 ---
 
 # Patrones no aplicados
@@ -442,7 +435,6 @@ En la solución del Día 5 no se aplican los siguientes patrones de diseño:
 * Adapter.
 * Decorator.
 * Observer.
-* Template Method.
 
 ---
 
