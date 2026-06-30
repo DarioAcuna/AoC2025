@@ -49,11 +49,6 @@ you -> ccc -> fff -> out
 
 En total, hay `5` caminos.
 
-Con el input real, el resultado obtenido para la parte 1 fue:
-
-```text id="q6yfzy"
-791
-```
 
 ---
 
@@ -72,12 +67,6 @@ Por tanto, un camino cuenta si:
 2. Termina en `out`.
 3. Pasa por `dac`.
 4. Pasa por `fft`.
-
-Con el input real, el resultado obtenido para la parte 2 fue:
-
-```text id="l94cxt"
-520476725037672
-```
 
 ---
 
